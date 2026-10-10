@@ -2,60 +2,266 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Repertinduvar - Şarkıları Oyla</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: #0b0c10; color: #fff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
     
-    /* Header */
-    header { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid #1f2833; z-index: 10; }
-    .brand { font-size: 1.25rem; font-weight: 800; background: linear-gradient(90deg, #ff4b4b, #ff8533); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .btn-ranking { background: #1f2833; color: #66fcf1; border: 1px solid #45a29e; padding: 6px 12px; border-radius: 18px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    /* Mobil tarayıcı çubuklarına göre dinamik yükseklik (dvh) */
+    html, body {
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background-color: #0b0c10;
+      color: #fff;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
     
-    /* Card Container */
-    .deck-container { flex: 1; position: relative; margin: 10px 14px; display: flex; align-items: center; justify-content: center; }
-    .card { position: absolute; width: 100%; height: 100%; max-width: 390px; max-height: 520px; background: #1f2833; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, opacity 0.3s ease; border: 1px solid #333; }
+    /* Üst Başlık */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      height: 52px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ff4b4b, #ff8533);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .btn-ranking {
+      background: #1f2833;
+      color: #66fcf1;
+      border: 1px solid #45a29e;
+      padding: 6px 12px;
+      border-radius: 18px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
     
-    .card-cover { width: 100%; height: 55%; background-size: cover; background-position: center; position: relative; }
-    .card-cover::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 70%; background: linear-gradient(to top, #1f2833, transparent); }
+    /* Kart Alanı */
+    .deck-container {
+      flex: 1;
+      position: relative;
+      margin: 4px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0; /* flex taşmasını önler */
+    }
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      max-width: 390px;
+      background: #1f2833;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      border: 1px solid #2b3945;
+    }
     
-    .card-content { flex: 1; padding: 12px 16px; display: flex; flex-direction: column; justify-content: space-between; }
-    .track-title { font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2; }
-    .track-artist { font-size: 0.85rem; color: #c5c6c7; margin-top: 4px; }
+    .card-cover {
+      width: 100%;
+      height: 48%;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .card-cover::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60%;
+      background: linear-gradient(to top, #1f2833, transparent);
+    }
     
-    /* Player Row */
-    .player-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
-    .btn-yt { background: #ff0000; color: #fff; border: none; padding: 7px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
-    .track-badge { background: #0b0c10; color: #66fcf1; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; border: 1px solid #45a29e; }
+    .card-content {
+      flex: 1;
+      padding: 10px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 0;
+    }
+    .track-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .track-artist {
+      font-size: 0.8rem;
+      color: #c5c6c7;
+      margin-top: 2px;
+    }
     
-    /* Rating Buttons (1-10) */
-    .rating-section { margin-top: auto; padding-top: 8px; border-top: 1px solid #2f3e46; }
-    .rating-label { font-size: 0.75rem; color: #8892b0; margin-bottom: 6px; text-align: center; }
-    .ratings-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
-    .btn-rate { background: #0b0c10; color: #fff; border: 1px solid #45a29e; border-radius: 8px; height: 38px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.1s; }
-    .btn-rate:active { transform: scale(0.9); background: #ff4b4b; border-color: #ff4b4b; }
+    /* Oynatıcı Satırı */
+    .player-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .btn-yt {
+      background: #ff0000;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 18px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .track-badge {
+      background: #0b0c10;
+      color: #66fcf1;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      border: 1px solid #45a29e;
+    }
     
-    /* Swipe Hints */
-    .swipe-badge { position: absolute; top: 18px; padding: 6px 14px; border-radius: 10px; font-weight: 800; font-size: 1.1rem; border: 3px solid; opacity: 0; pointer-events: none; z-index: 5; }
-    .badge-like { right: 18px; color: #00ff88; border-color: #00ff88; transform: rotate(15deg); }
-    .badge-pass { left: 18px; color: #ff3366; border-color: #ff3366; transform: rotate(-15deg); }
+    /* Puanlama Butonları (1-10) */
+    .rating-section {
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1px solid #283747;
+    }
+    .rating-label {
+      font-size: 0.72rem;
+      color: #8892b0;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+    .ratings-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 3px;
+    }
+    .btn-rate {
+      background: #0b0c10;
+      color: #fff;
+      border: 1px solid #45a29e;
+      border-radius: 6px;
+      height: 36px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-rate:active {
+      transform: scale(0.92);
+      background: #ff4b4b;
+      border-color: #ff4b4b;
+    }
     
-    /* Action Bar */
-    .action-bar { display: flex; justify-content: center; align-items: center; gap: 24px; padding: 8px 18px 16px; }
-    .btn-action { width: 52px; height: 52px; border-radius: 50%; border: none; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+    /* İpuçları */
+    .swipe-badge {
+      position: absolute;
+      top: 16px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 1rem;
+      border: 3px solid;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .badge-like { right: 16px; color: #00ff88; border-color: #00ff88; transform: rotate(15deg); }
+    .badge-pass { left: 16px; color: #ff3366; border-color: #ff3366; transform: rotate(-15deg); }
+    
+    /* Alt Aksiyon Butonları */
+    .action-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 28px;
+      padding: 6px 16px 14px;
+      flex-shrink: 0;
+    }
+    .btn-action {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
     .btn-pass { background: #1f2833; color: #ff3366; border: 1px solid #ff3366; }
     .btn-love { background: #1f2833; color: #00ff88; border: 1px solid #00ff88; }
     
-    /* Modal Ranking */
-    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 99; padding: 20px; overflow-y: auto; }
-    .modal-content { background: #1f2833; border-radius: 16px; padding: 18px; max-width: 440px; margin: 20px auto; border: 1px solid #45a29e; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .modal-close { background: none; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; }
+    /* Sıralama Modalı */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(5px);
+      z-index: 99;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    .modal-content {
+      background: #1f2833;
+      border-radius: 16px;
+      padding: 16px;
+      max-width: 420px;
+      margin: 10px auto;
+      border: 1px solid #45a29e;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
     .rank-list { list-style: none; }
-    .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 8px; border-bottom: 1px solid #2b3945; font-size: 0.9rem; }
-    .rank-pos { font-weight: 800; color: #ff8533; width: 26px; }
-    .rank-title { flex: 1; margin: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rank-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 6px;
+      border-bottom: 1px solid #2b3945;
+      font-size: 0.85rem;
+    }
+    .rank-pos { font-weight: 800; color: #ff8533; width: 24px; }
+    .rank-title { flex: 1; margin: 0 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .rank-score { font-weight: 700; color: #66fcf1; }
   </style>
 </head>
@@ -85,12 +291,12 @@
 
   <script>
     const playlist = [
-      { id: "1", title: "Hayata Şans Ver", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80", yt: "https://www.youtube.com/watch?v=PLUBmmTfbeg6E" },
-      { id: "2", title: "İd Ve Dondurma", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80", yt: "https://www.youtube.com/watch?v=PLUBmmTfbeg6E" },
-      { id: "3", title: "Pure is Out", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=80", yt: "https://www.youtube.com/watch?v=PLUBmmTfbeg6E" },
-      { id: "4", title: "Yeni Yolum", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80", yt: "https://www.youtube.com/watch?v=PLUBmmTfbeg6E" },
-      { id: "5", title: "Güvenin Vadesi", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=600&q=80", yt: "https://www.youtube.com/watch?v=PLUBmmTfbeg6E" },
-      { id: "6", title: "Bakışının Ağırlığı", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80", yt: "https://www.youtube.com/watch?v=PLUBmmTfbeg6E" }
+      { id: "1", title: "Hayata Şans Ver", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
+      { id: "2", title: "İd Ve Dondurma", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
+      { id: "3", title: "Pure is Out", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
+      { id: "4", title: "Yeni Yolum", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
+      { id: "5", title: "Güvenin Vadesi", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
+      { id: "6", title: "Bakışının Ağırlığı", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" }
     ];
 
     let scores = JSON.parse(localStorage.getItem('repertinduvar_scores') || '{}');
@@ -147,13 +353,13 @@
 
       const card = document.getElementById(`card-${index}`);
       if (card) {
-        card.style.transform = `translateY(-80px) scale(0.9)`;
+        card.style.transform = `translateY(-60px) scale(0.92)`;
         card.style.opacity = '0';
       }
       setTimeout(() => {
         currentIndex++;
         renderDeck();
-      }, 250);
+      }, 200);
     }
 
     function handleAction(type) {
