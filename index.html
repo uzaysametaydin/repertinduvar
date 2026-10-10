@@ -22,7 +22,6 @@
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
     
-    /* Üst Başlık */
     header {
       display: flex;
       align-items: center;
@@ -50,7 +49,6 @@
       cursor: pointer;
     }
     
-    /* Kart Alanı */
     .deck-container {
       flex: 1;
       position: relative;
@@ -75,28 +73,23 @@
       border: 1px solid #2b3945;
     }
     
-    /* Görsel oranını düşürerek butonlara yer açtık */
-    .card-cover {
+    /* Gömülü Player Alanı */
+    .card-player-container {
       width: 100%;
-      height: 40%;
-      background-size: cover;
-      background-position: center;
+      height: 45%;
+      background: #000;
       position: relative;
       flex-shrink: 0;
     }
-    .card-cover::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 50%;
-      background: linear-gradient(to top, #1f2833, transparent);
+    .card-player-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
     
     .card-content {
       flex: 1;
-      padding: 8px 12px 10px;
+      padding: 10px 14px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -113,28 +106,9 @@
       color: #c5c6c7;
       margin-top: 2px;
     }
-    
-    /* Oynatıcı Satırı */
-    .player-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .btn-yt {
-      background: #ff0000;
-      color: #fff;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 16px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
     .track-badge {
+      display: inline-block;
+      margin-top: 6px;
       background: #0b0c10;
       color: #66fcf1;
       padding: 3px 8px;
@@ -143,7 +117,7 @@
       border: 1px solid #45a29e;
     }
     
-    /* Puanlama Butonları (1-10) */
+    /* Puanlama Butonları */
     .rating-section {
       margin-top: 4px;
       padding-top: 6px;
@@ -179,23 +153,7 @@
       border-color: #ff4b4b;
     }
     
-    /* İpuçları */
-    .swipe-badge {
-      position: absolute;
-      top: 14px;
-      padding: 5px 10px;
-      border-radius: 8px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      border: 3px solid;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 5;
-    }
-    .badge-like { right: 14px; color: #00ff88; border-color: #00ff88; transform: rotate(15deg); }
-    .badge-pass { left: 14px; color: #ff3366; border-color: #ff3366; transform: rotate(-15deg); }
-    
-    /* Alt Butonlar */
+    /* Alt Aksiyon Butonları */
     .action-bar {
       display: flex;
       justify-content: center;
@@ -290,13 +248,14 @@
   </div>
 
   <script>
+    // ytId alanına parçaların YouTube video kimliklerini ekleyebilirsin
     const playlist = [
-      { id: "1", title: "Hayata Şans Ver", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
-      { id: "2", title: "İd Ve Dondurma", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
-      { id: "3", title: "Pure is Out", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
-      { id: "4", title: "Yeni Yolum", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
-      { id: "5", title: "Güvenin Vadesi", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" },
-      { id: "6", title: "Bakışının Ağırlığı", artist: "Uzay Samet AYDIN", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80", yt: "https://www.youtube.com/playlist?list=PLUBmmTfbeg6E" }
+      { id: "1", title: "Hayata Şans Ver", artist: "Uzay Samet AYDIN", ytId: "dQw4w9WgXcQ" },
+      { id: "2", title: "İd Ve Dondurma", artist: "Uzay Samet AYDIN", ytId: "dQw4w9WgXcQ" },
+      { id: "3", title: "Pure is Out", artist: "Uzay Samet AYDIN", ytId: "dQw4w9WgXcQ" },
+      { id: "4", title: "Yeni Yolum", artist: "Uzay Samet AYDIN", ytId: "dQw4w9WgXcQ" },
+      { id: "5", title: "Güvenin Vadesi", artist: "Uzay Samet AYDIN", ytId: "dQw4w9WgXcQ" },
+      { id: "6", title: "Bakışının Ağırlığı", artist: "Uzay Samet AYDIN", ytId: "dQw4w9WgXcQ" }
     ];
 
     let scores = JSON.parse(localStorage.getItem('repertinduvar_scores') || '{}');
@@ -316,22 +275,25 @@
 
       for (let i = Math.min(currentIndex + 1, playlist.length - 1); i >= currentIndex; i--) {
         const item = playlist[i];
+        const isCurrent = (i === currentIndex);
         const card = document.createElement('div');
         card.className = 'card';
         card.id = `card-${i}`;
         
+        // Sadece aktif üst kartta YouTube iframe yüklenir (kaynak tasarrufu için)
+        const embedHtml = isCurrent 
+          ? `<iframe src="https://www.youtube.com/embed/${item.ytId}?playsinline=1&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+          : `<div style="width:100%; height:100%; background:#121820; display:flex; align-items:center; justify-content:center; color:#555;">Sıradaki Parça</div>`;
+
         card.innerHTML = `
-          <div class="swipe-badge badge-like">10 / 10</div>
-          <div class="swipe-badge badge-pass">GEÇTİM</div>
-          <div class="card-cover" style="background-image: url('${item.cover}')"></div>
+          <div class="card-player-container">
+            ${embedHtml}
+          </div>
           <div class="card-content">
             <div>
               <div class="track-title">${item.title}</div>
               <div class="track-artist">${item.artist}</div>
-              <div class="player-row">
-                <a class="btn-yt" href="${item.yt}" target="_blank">▶ YouTube'da Dinle</a>
-                <span class="track-badge">${i + 1} / ${playlist.length}</span>
-              </div>
+              <span class="track-badge">${i + 1} / ${playlist.length}</span>
             </div>
             <div class="rating-section">
               <div class="rating-label">Puanını Seç (1 - 10)</div>
